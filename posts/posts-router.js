@@ -18,31 +18,28 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     Posts.findById(req.params.id)
     .then(post => {
-        // if (post) {
-        //     console.log(post)
-        //     res.status(200).json(post)
-        // } else {
-        //     console.log(post)
-        //     res.status(404).json({errorMessage: "Post not found Mr. Frodo!"})
-        // }
         if (post.length == 0) {
-            res.status(400).json({error: "Post not found!"})
+            res.status(404).json({error: "Post not found!"})
         } else if (post === post) {
             res.status(200).json(post)
         }
     })
     .catch(error => {
         console.log(error);
-        res.status(500).json({
-          message: 'Error retrieving the hub',
-        });
+        res.status(500).json({message: 'Error retrieving the hub'});
       });
 })
 
 router.get("/:id/comments", (req, res) => {
     Posts.findPostComments(req.params.id)
     .then(comments => {
-        res.status(200).json(comments)
+        if (comments.length === 0) {
+            res.status(404).json({message: "The post with the specified ID does not exist."})
+        } else res.status(200).json(comments)
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({error: "The comments information could not be retrieved."})
     })
 })
 
