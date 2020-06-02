@@ -3,8 +3,15 @@ const router = express.Router();
 
 const Posts = require("../data/db.js")
 
+// router.get("/", (req, res) => {
+//     res.status(200).json("You got it!")
+// })
+
 router.get("/", (req, res) => {
-    res.status(200).json("You got it!")
+    Posts.find(req.query)
+    .then(posts => {
+        res.status(200).json(posts);
+    })
 })
 
 
