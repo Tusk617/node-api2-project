@@ -47,6 +47,13 @@ router.post("/", (req, res) => {
     })
 })
 
+router.post("/:id/comments", (req, res) => {
+    Posts.insertComment(req.body)
+    .then(newComment => {
+        res.status(200).json(newComment)
+    })
+})
+
 
 
 
