@@ -40,5 +40,14 @@ router.get("/:id/comments", (req, res) => {
     })
 })
 
+router.post("/", (req, res) => {
+    Posts.insert(req.body)
+    .then(newPost => {
+        res.status(200).json(newPost)
+    })
+})
+
+
+
 
 module.exports = router;
