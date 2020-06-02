@@ -3,9 +3,9 @@ const express = require("express");
 const server = express();
 server.use(express.json());
 
-server.get("/", (req, res) => {
-    res.status(200).json("You got it!")
-})
+const postsRouter = require("./posts/posts-router.js");
+
+server.use("/api/posts", postsRouter);
 
 
 const port = 8000;
