@@ -1,6 +1,8 @@
 const express = require("express");
 
 const server = express();
+
+//middleware
 server.use(express.json());
 
 const postsRouter = require("./posts/posts-router.js");
