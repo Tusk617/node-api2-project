@@ -18,11 +18,17 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     Posts.findById(req.params.id)
     .then(post => {
-        if (post) {
-            console.log(post)
+        // if (post) {
+        //     console.log(post)
+        //     res.status(200).json(post)
+        // } else {
+        //     console.log(post)
+        //     res.status(404).json({errorMessage: "Post not found Mr. Frodo!"})
+        // }
+        if (post.length == 0) {
+            res.status(400).json({error: "Post not found!"})
+        } else if (post === post) {
             res.status(200).json(post)
-        } else {
-            res.status(404).json({errorMessage: "Post not found Mr. Frodo!"})
         }
     })
     .catch(error => {
@@ -44,7 +50,16 @@ router.post("/", (req, res) => {
     Posts.insert(req.body)
     .then(newPost => {
         res.status(200).json(newPost)
+        if (!newPost.title || !newPost.contents) {
+            res.status(400).json({errorMessage: "Please provide title and contents for the post."})
+        } else res.status(201).status(newPost)
     })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({
+          message: 'Error retrieving the hub',
+        });
+      });
 })
 
 router.post("/:id/comments", (req, res) => {
@@ -61,6 +76,13 @@ router.delete("/:id", (req, res) => {
     })
 })
 
+router.put("/:id", (req, res) => {
+    // let banana = "";
+    Posts.update(req.params.id, req.body)
+    .then(newPost => {
+        res.status(200).json(newPost)
+    })
+})
 
 
 
