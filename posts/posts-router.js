@@ -54,6 +54,13 @@ router.post("/:id/comments", (req, res) => {
     })
 })
 
+router.delete("/:id", (req, res) => {
+    Posts.remove(req.params.id)
+    .then(post => {
+        res.status(200).json(post)
+    })
+})
+
 
 
 
