@@ -10,8 +10,11 @@ const Posts = require("../data/db.js")
 router.get("/", (req, res) => {
     Posts.find(req.query)
     .then(posts => {
-        console.log(posts)
+        // console.log(posts)
         res.status(200).json(posts);
+    })
+    .catch(error => {
+        res.status(500).json({error: "The posts information could not be retrieved."})
     })
 })
 
@@ -22,6 +25,7 @@ router.get("/:id", (req, res) => {
             res.status(404).json({error: "Post not found!"})
         } else if (post === post) {
             res.status(200).json(post)
+            console.log(res.params)
         }
     })
     .catch(error => {
@@ -62,22 +66,54 @@ router.post("/", (req, res) => {
 router.post("/:id/comments", (req, res) => {
     Posts.insertComment(req.body)
     .then(newComment => {
-        res.status(200).json(newComment)
+        console.log(newComment)
     })
 })
 
 router.delete("/:id", (req, res) => {
-    Posts.remove(req.params.id)
+    const { id } = req.params
+    Posts.findById(id)
     .then(post => {
-        res.status(200).json(post)
+        Posts.remove(id)
+        .then(() => {
+            res.status(200).json(post)
+        })
+        .catch()
     })
+    .catch()
+
+    // let removedPost = {};
+    // router.get("/:id", (req, res) => {
+    //     Posts.findById(req.params.id)
+    //     .then(post => {
+    //         removedPost = post;
+    //         console.log(removedPost);
+    //     })
+    // })
+    // Posts.remove(req.params.id)
+    // .then(post => {
+    //     if (post === 0) {
+    //         res.status(404).json({message: "The post with the specified ID does not exist."})
+    //     } else {
+    //         console.log(post)
+    //         res.status(200).json(post)
+    //     }
+    // })
+    // .catch(error => {
+    //     console.log(error)
+    //     res.status(500).json({error: "The post could not be removed"})
+    // })
 })
 
 router.put("/:id", (req, res) => {
-    // let banana = "";
-    Posts.update(req.params.id, req.body)
+    const changes = req.body;
+    Posts.update(req.params.id, changes)
     .then(newPost => {
-        res.status(200).json(newPost)
+        res.status(200).json(changes)
+        if (newPost === 0) {
+            console.log(newPost)
+            res.status(404).json({message: "The post with the specified ID does not exist."})
+        }
     })
 })
 
