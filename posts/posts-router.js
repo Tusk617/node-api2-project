@@ -76,11 +76,21 @@ router.delete("/:id", (req, res) => {
     .then(post => {
         Posts.remove(id)
         .then(() => {
-            res.status(200).json(post)
+            if (post.length === 0) {
+                res.status(404).json({message: "The post with the specified ID does not exist."})
+            } else {
+                res.status(200).json(post)
+            }
         })
-        .catch()
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({error: "The post could not be removed"})
+        })
     })
-    .catch()
+    .catch(error => {
+        console.log(error)
+        res.status(500).json({error: "The post could not be removed"})
+    })
 
     // let removedPost = {};
     // router.get("/:id", (req, res) => {
