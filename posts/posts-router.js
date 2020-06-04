@@ -48,17 +48,28 @@ router.get("/:id/comments", (req, res) => {
 })
 
 router.post("/", (req, res) => {
-    Posts.insert(req.body)
+    const body = req.body
+    console.log(body.title);
+    console.log(body.contents);
+    console.log(body)
+    Posts.insert(body)
     .then(newPost => {
-        res.status(200).json(newPost)
-        if (!newPost.title || !newPost.contents) {
-            res.status(400).json({errorMessage: "Please provide title and contents for the post."})
-        } else res.status(201).status(newPost)
+        // console.log(newPost)
+        // if (!body.contents) {
+        //     res.status(400).json({errorMessage: "Please provide title and contents for the post."})
+        // } else {
+        //     res.status(201).status(body)
+        // }
+        Posts.find()
+        .then(posts => {
+            res.status(200).json(posts)
+        })
+        // res.status(201).status(body)
     })
     .catch(error => {
         console.log(error);
         res.status(500).json({
-          message: 'Error retrieving the hub',
+          message: 'Error saving the post to the database... ',
         });
       });
 })
